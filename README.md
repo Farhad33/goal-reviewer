@@ -12,26 +12,16 @@ Serving an actual customer is a huge part of writing good software.  If you take
 - [ ] An external, published, all-JS site which improves the UX of browsing/searching these goals 
 - [ ] Auth is handled through GitHub Oauth
 - [ ] Basically, duplicate the functionality of https://goals-viewer-api.herokuapp.com/
-- [ ] Your site uses the GitHub API to access/one-way sync the actual goals from this repo's issues
-- [ ] You have interviewed at least three potential users at your app and integrated their feedback
-- [ ] Your site uses GitHub API to access goal data
+- [ ] Your site uses the GitHub API to read/write the actual goals from this repo's issues
+- [ ] You have interviewed at least three potential users about your app and integrated their feedback
 - [ ] Use React to create a smooth, one-page app UX
 - [ ] You can search/filter the full description in table view
-- [ ] Anonymous users can upvote or downvote the goals
-- [ ] Registered (or anonymous) users can review goals
-- [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
-
-## Optional Specs (Nice To Have)
-
-
-- [ ] Add another view, such as goals-as-cards and/or a nicely detailed show page for goals
+- [ ] Users can upvote or downvote the goals
+- [ ] Users can review goals
 - [ ] Integrate with echo to pull in info of who's already completed one goals (instead of having to enter it manually as currently done)
-- [ ] Be creative!  Anything you can think of, that you or users would want
-- [ ] Write all your code in ES2015
-- [ ] Add unit and feature tests
-- [ ] Create an iOS app
+- [ ] All JS code is written in ES2015
+- [ ] The artifact produced is licensed with the [MIT license][mit-license].
 
----
 
 <!-- LICENSE -->
 
