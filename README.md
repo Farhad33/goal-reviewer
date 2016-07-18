@@ -12,13 +12,10 @@ Serving an actual customer is a huge part of writing good software.  If you take
 - [ ] An external, published, all-JS site which improves the UX of browsing/searching these goals 
 - [ ] Auth is handled through GitHub Oauth
 - [ ] Basically, duplicate the functionality of https://goals-viewer-api.herokuapp.com/
-- [ ] You use the same schema described in https://github.com/bluemihai/goals-viewer
 - [ ] Your site uses the GitHub API to access/one-way sync the actual goals from this repo's issues
-- [ ] You schedule an hourly task to perform this sync, but can also do it on demand
 - [ ] You have interviewed at least three potential users at your app and integrated their feedback
-- [ ] Your site uses a database (SQL or Mongo) to store additional information about each goal
+- [ ] Your site uses GitHub API to access goal data
 - [ ] Use React to create a smooth, one-page app UX
-- [ ] Determine whether you want a Service-Oriented Architecture (front-end)
 - [ ] You can search/filter the full description in table view
 - [ ] Anonymous users can upvote or downvote the goals
 - [ ] Registered (or anonymous) users can review goals
