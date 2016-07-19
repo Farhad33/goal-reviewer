@@ -2,6 +2,7 @@ var cookieSession = require('cookie-session');
 var express = require('express');
 var qs = require('querystring');
 var app = express();
+var request = require('request');
 var CLIENT_ID = process.env.CLIENT_ID
 var CLIENT_SECRET = process.env.CLIENT_SECRET
 var REDIRECT_URI = process.env.REDIRECT_URI
@@ -14,6 +15,7 @@ var oauth2 = require('simple-oauth2')({
   authorizationPath: '/oauth/authorize'
 });
 
+// var token = req.session.access_token;
 app.set('trust proxy', 1)
 
 var port = (process.env.PORT || 5000);
@@ -23,13 +25,6 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
-// app.use(function (req, res, next) {
-//   // Update views
-//   req.session.views = (req.session.views || 0) + 1
-
-//   // Write response
-//   res.end(req.session.views + ' views')
-// })
 
 // Authorization uri definition
 var authorization_uri = oauth2.authCode.authorizeURL({
@@ -47,26 +42,25 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
   if (!req.session.access_token){
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-    return;
   }
 
-  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>'+req.session.access_token);
-  // var user_profile = {app.get https://api.github.com/user?access_token=req.session.access_token}
+  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
+
   // use the token req.session.access_token to get the users github profil info
-  // user_profile['login']
   var x = "https://api.github.com/user?access_token="
   var y = req.session.access_token
-  var z = x.concat(y);
-  app.get('/', function (z, res) {
-    var result = res;
-    res.send(result);
-    console.log(result);
+
+  console.log('TOKEN: ' + token)
+
+  request({
+    method: 'GET',
+    url: x + y,
+    headers: {'user-agent': 'node.js'}
+  }, function(error, response){
+
+    res.json(JSON.parse(response.body));
   })
 });
-
-
-https://api.github.com/user?access_token=req.session.access_token
-
 
 // Initial page redirecting to Github
 app.get('/auth', function (req, res) {
