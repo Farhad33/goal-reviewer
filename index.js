@@ -45,16 +45,10 @@ app.get('/', function (req, res) {
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
     // return;
   }else{
-    res.send(
-      '<h1>welcome back</h1>'+
-      '<a href="/logout">Logout</a>'+
-      '<script src="https://code.jquery.com/jquery-3.1.0.js"> </script>'+
-      '<script src="/client.js"> </script>'
-    );
+    res.sendfile('public/index.html')
   }
 
 });
-
 
 app.get('/api/user', function(req, res){
   // use the token req.session.access_token to get the users github profil info
