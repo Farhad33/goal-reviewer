@@ -16,6 +16,7 @@ var oauth2 = require('simple-oauth2')({
 });
 
 // var token = req.session.access_token;
+
 app.set('trust proxy', 1)
 
 var port = (process.env.PORT || 5000);
@@ -42,23 +43,31 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
   if (!req.session.access_token){
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
+    // return;
+  }else{
+    res.send(
+      '<h1>welcome back</h1>'+
+      '<a href="/logout">Logout</a>'+
+      '<script src="https://code.jquery.com/jquery-3.1.0.js"> </script>'+
+      '<script src="/client.js"> </script>'
+    );
   }
 
-  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
+});
 
+
+app.get('/api/user', function(req, res){
   // use the token req.session.access_token to get the users github profil info
   var x = "https://api.github.com/user?access_token="
   var y = req.session.access_token
-
-  console.log('TOKEN: ' + token)
 
   request({
     method: 'GET',
     url: x + y,
     headers: {'user-agent': 'node.js'}
-  }, function(error, response){
-
-    res.json(JSON.parse(response.body));
+  }, function(error, userInfoResponse){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(userInfoResponse.body);
   })
 });
 
