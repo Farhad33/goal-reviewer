@@ -12,7 +12,8 @@
   "dependencies": {
     "cool-ascii-faces": "1.3.4",
     "ejs": "2.4.1",
-    "express": "4.13.3"
+    "express": "4.13.3",
+    "simple-oauth2": "^0.7.0"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
 }
