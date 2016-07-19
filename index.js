@@ -5,6 +5,7 @@ var app = express();
 var CLIENT_ID = process.env.CLIENT_ID
 var CLIENT_SECRET = process.env.CLIENT_SECRET
 var REDIRECT_URI = process.env.REDIRECT_URI
+
 var oauth2 = require('simple-oauth2')({
   clientID: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
@@ -33,7 +34,7 @@ app.use(cookieSession({
 // Authorization uri definition
 var authorization_uri = oauth2.authCode.authorizeURL({
   redirect_uri: REDIRECT_URI,
-  scope: 'notifications',
+  scope: 'user:email',
   state: '3(#0/!~'
 });
 
@@ -49,16 +50,23 @@ app.get('/', function (req, res) {
     return;
   }
 
-  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
-
+  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>'+req.session.access_token);
+  // var user_profile = {app.get https://api.github.com/user?access_token=req.session.access_token}
   // use the token req.session.access_token to get the users github profil info
-
-
+  // user_profile['login']
+  var x = "https://api.github.com/user?access_token="
+  var y = req.session.access_token
+  var z = x.concat(y);
+  app.get('/', function (z, res) {
+    var result = res;
+    res.send(result);
+    console.log(result);
+  })
 });
 
-// app.get('/cool', function(request, response) {
-//   response.send(cool());
-// });
+
+https://api.github.com/user?access_token=req.session.access_token
+
 
 // Initial page redirecting to Github
 app.get('/auth', function (req, res) {
