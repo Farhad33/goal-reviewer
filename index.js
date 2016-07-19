@@ -1,4 +1,4 @@
-// var cool = require('cool-ascii-faces');
+var cookieSession = require('cookie-session');
 var express = require('express');
 var qs = require('querystring');
 var app = express();
@@ -13,7 +13,22 @@ var oauth2 = require('simple-oauth2')({
   authorizationPath: '/oauth/authorize'
 });
 
+app.set('trust proxy', 1)
+
 var port = (process.env.PORT || 5000);
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
+
+// app.use(function (req, res, next) {
+//   // Update views
+//   req.session.views = (req.session.views || 0) + 1
+
+//   // Write response
+//   res.end(req.session.views + ' views')
+// })
 
 // Authorization uri definition
 var authorization_uri = oauth2.authCode.authorizeURL({
