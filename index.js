@@ -43,9 +43,9 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
   if (!req.session.access_token){
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-    // return;
+    return;
   }else{
-    res.sendfile('public/index.html')
+    // res.sendfile('public/index.html')
   }
 
 });
@@ -64,8 +64,6 @@ app.get('/api/user', function(req, res){
     res.setHeader('Content-Type', 'application/json');
     res.send(userInfoResponse.body);
   })
-
-
 });
 
 // Initial page redirecting to Github

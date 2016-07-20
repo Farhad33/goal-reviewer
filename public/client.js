@@ -46,10 +46,6 @@ var ImageThing = React.createClass({
   }
 })
 
-var element = <div className="whatever">
-   Some text
-</div>
-
 ReactDOM.render(
   <Example />,
   document.getElementById('content')
