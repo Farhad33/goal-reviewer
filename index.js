@@ -40,14 +40,28 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+// app.get('/', function (req, res) {
+//   if (!req.session.access_token){
+//     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
+//     return;
+//   }else{
+//     res.sendfile('public/index.html')
+//   }
+
+// });
+
 app.get('/', function (req, res) {
   if (!req.session.access_token){
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-    // return;
+    return;
   }else{
-    res.sendfile('public/index.html')
+    res.send(
+      '<h1>welcome back</h1>'+
+      '<a href="/logout">Logout</a>'
+      // +'<script src="https://code.jquery.com/jquery-3.1.0.js"> </script>'+
+      // '<script src="/client.js"> </script>'
+    );
   }
-
 });
 
 app.get('/api/user', function(req, res){
