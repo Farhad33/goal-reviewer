@@ -52,12 +52,13 @@ app.get('/', function (req, res) {
 
 app.get('/api/user', function(req, res){
   // use the token req.session.access_token to get the users github profil info
-  var x = "https://api.github.com/user?access_token="
-  var y = req.session.access_token
+  var user_endpoint = "https://api.github.com/user?access_token="
+  var token = req.session.access_token
+  var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
 
   request({
     method: 'GET',
-    url: x + y,
+    url: user_endpoint + issues_endpoint,
     headers: {'user-agent': 'node.js'}
   }, function(error, userInfoResponse){
     res.setHeader('Content-Type', 'application/json');
