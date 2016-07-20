@@ -63,6 +63,8 @@ app.get('/', function (req, res) {
 
   console.log('TOKEN: ' + token)
 
+  console.log('TOKEN: ' + token)
+
   request({
     method: 'GET',
     url: user_endpoint + issues_endpoint,
