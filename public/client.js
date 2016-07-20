@@ -11,7 +11,7 @@ var Example = React.createClass({
         <Button size="large">click me</Button>
         <Button>regular</Button>
         <Button size="small">or me</Button>
-
+        <element></element>
         <ImageThing location='http://thecatapi.com/api/images/get?format=src&type=gif' alt='This is my image thing' />
         <ImageThing location='https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg' alt='image 2' />
       </div>
@@ -45,6 +45,10 @@ var ImageThing = React.createClass({
     );
   }
 })
+
+var element = <div className="whatever">
+   Some text
+</div>
 
 ReactDOM.render(
   <Example />,
