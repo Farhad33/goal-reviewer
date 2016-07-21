@@ -6,6 +6,7 @@ var request = require('request');
 var CLIENT_ID = process.env.CLIENT_ID
 var CLIENT_SECRET = process.env.CLIENT_SECRET
 var REDIRECT_URI = process.env.REDIRECT_URI
+var token = null
 
 var oauth2 = require('simple-oauth2')({
   clientID: CLIENT_ID,
@@ -25,11 +26,10 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
-
 // Authorization uri definition
 var authorization_uri = oauth2.authCode.authorizeURL({
   redirect_uri: REDIRECT_URI,
-  scope: 'user:email',
+  scope: 'repo',
   state: '3(#0/!~'
 });
 
@@ -52,27 +52,25 @@ app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
   if (!req.session.access_token){
     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-  }
-
+  }else{
+  token = req.session.access_token
   res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
 
   // use the token req.session.access_token to get the users github profil info
   var user_endpoint = "https://api.github.com/user?access_token="
-  var token = req.session.access_token
   var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
-
-  console.log('TOKEN: ' + token)
 
   console.log('TOKEN: ' + token)
 
   request({
     method: 'GET',
-    url: user_endpoint + issues_endpoint,
+    url: user_endpoint + token,
     headers: {'user-agent': 'node.js'}
-  }, function(error, response){
-
-    res.json(JSON.parse(response.body));
-  })
+  }, function(error, userInfoResponse){
+    // res.setHeader('Content-Type', 'application/json');
+    // res.send(userInfoResponse.body);
+   })
+}
 });
 
 // Initial page redirecting to Github
