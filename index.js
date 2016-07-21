@@ -31,37 +31,18 @@ var SECRET_OAUTH_STATE = '3(#0/!~'
 // Authorization uri definition
 var authorizationURI = oauth2.authCode.authorizeURL({
   redirect_uri: REDIRECT_URI,
-  scope: 'repo',
+  scope: 'repo user admin:org',
   state: SECRET_OAUTH_STATE,
 });
-
-// app.get('/', function (req, res) {
-//   if (!req.session.access_token){
-//     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-//   }else{
-//   token = req.session.access_token
-//   res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
-
-//   // use the token req.session.access_token to get the users github profil info
-//   var user_endpoint = "https://api.github.com/user?access_token="
-//   var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
-
-//   console.log('TOKEN: ' + token)
-
-//   request({
-//     method: 'GET',
-//     url: user_endpoint + token,
-//     headers: {'user-agent': 'node.js'}
-//   }, function(error, userInfoResponse){
-//     // res.setHeader('Content-Type', 'application/json');
-//     // res.send(userInfoResponse.body);
-//    })
-// }
-// });
 
 // Initial page redirecting to Github
 app.get('/auth', function (req, res) {
   res.redirect(authorizationURI);
+});
+
+app.get('/logout', function (req, res) {
+  req.session = null;
+  res.redirect('/');
 });
 
 // Callback service parsing the authorization token and asking for the access token
@@ -102,9 +83,9 @@ app.get('/api/profile', function(req, res){
   });
 })
 
+
 app.get('/api/goals', function(req, res){
   // if (!req.session.access_token) return renderAccessDenied(res)
-
   getGoals(req.session.access_token, function(error, goals){
     if (error) {
       res.json({error: error})
@@ -124,7 +105,22 @@ function getProfile(access_token, callback){
     url: url,
     headers: {'user-agent': 'node.js'}
   }, function(error, response){
-    console.log(response)
+    // console.log(response)
+    callback(error, JSON.parse(response.body))
+  })
+}
+
+function getGoals(access_token, callback){
+  let url = 'https://api.github.com/repos/GuildCrafts/web-development-js/issues'
+  url += '?'+qs.stringify({
+    access_token: access_token
+  })
+  request({
+    method: 'get',
+    url: url,
+    headers: {'user-agent': 'node.js'}
+  }, function(error, response){
+    console.log(access_token)
     callback(error, JSON.parse(response.body))
   })
 }

@@ -42,6 +42,7 @@
 //   }
 // })
 
+// Root helps you login
 var Root = React.createClass({
   propTypes: {
     path: React.PropTypes.string.isRequired,
@@ -113,10 +114,7 @@ var Router = React.createClass({
     console.log('RENDER router', this.props)
     var profile = this.props.profile;
     var path = this.props.path;
-
-
     var Page = router(path)
-
     return <Page profile={profile} />
   }
 })
@@ -143,7 +141,6 @@ function router(path){
 
 var HomePage = React.createClass({
   propTypes: {
-    path: React.PropTypes.string.isRequired,
     profile: React.PropTypes.object.isRequired,
   },
   render: function(){
@@ -151,6 +148,7 @@ var HomePage = React.createClass({
     return  (
       <div>
         <h1>Welcome back {profile.name}</h1>
+        <a href="/goals">Goals</a>
         <img src={profile.avatar_url} />
       </div>
     )
@@ -167,11 +165,11 @@ var GoalsPage = React.createClass({
     profile: React.PropTypes.object.isRequired,
   },
   render: function(){
-    var profile = this.props.profile;
+    var goals = this.props.goals;
     return  (
       <div>
-        <h1>Goals For {profile.name}</h1>
-        <img src={profile.avatar_url} />
+        <h1>Goals Page</h1>
+        
       </div>
     )
   }
