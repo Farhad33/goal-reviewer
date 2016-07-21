@@ -26,65 +26,57 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+
+var SECRET_OAUTH_STATE = '3(#0/!~'
 // Authorization uri definition
-var authorization_uri = oauth2.authCode.authorizeURL({
+var authorizationURI = oauth2.authCode.authorizeURL({
   redirect_uri: REDIRECT_URI,
   scope: 'repo',
-  state: '3(#0/!~'
+  state: SECRET_OAUTH_STATE,
 });
-
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
 
 // app.get('/', function (req, res) {
 //   if (!req.session.access_token){
 //     res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-//     return;
 //   }else{
-//     res.sendfile('public/index.html')
-//   }
+//   token = req.session.access_token
+//   res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
 
+//   // use the token req.session.access_token to get the users github profil info
+//   var user_endpoint = "https://api.github.com/user?access_token="
+//   var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
+
+//   console.log('TOKEN: ' + token)
+
+//   request({
+//     method: 'GET',
+//     url: user_endpoint + token,
+//     headers: {'user-agent': 'node.js'}
+//   }, function(error, userInfoResponse){
+//     // res.setHeader('Content-Type', 'application/json');
+//     // res.send(userInfoResponse.body);
+//    })
+// }
 // });
-
-app.get('/', function (req, res) {
-  if (!req.session.access_token){
-    res.send('<h1>Hello</h1><a href="/auth">Log in with Github</a>');
-  }else{
-  token = req.session.access_token
-  res.send('<h1>welcome back</h1><a href="/logout">Logout</a>');
-
-  // use the token req.session.access_token to get the users github profil info
-  var user_endpoint = "https://api.github.com/user?access_token="
-  var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
-
-  console.log('TOKEN: ' + token)
-
-  request({
-    method: 'GET',
-    url: user_endpoint + token,
-    headers: {'user-agent': 'node.js'}
-  }, function(error, userInfoResponse){
-    // res.setHeader('Content-Type', 'application/json');
-    // res.send(userInfoResponse.body);
-   })
-}
-});
 
 // Initial page redirecting to Github
 app.get('/auth', function (req, res) {
-  res.redirect(authorization_uri);
+  res.redirect(authorizationURI);
 });
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth_callback', function (req, res) {
+  if (req.query.state !== SECRET_OAUTH_STATE){
+    throw new Error('HACKERS!!!')
+  }
   oauth2.authCode.getToken({
     code: req.query.code,
     redirect_uri: REDIRECT_URI
   }, function(error, result) {
-    if (error) { console.log('Access Token Error', error.message); }
+    if (error) { 
+      console.log('Access Token Error', error.message); 
+      throw error;
+    }
     var response = oauth2.accessToken.create(result);
     var access_token = qs.parse(response.token).access_token
     req.session.access_token = access_token
@@ -92,6 +84,60 @@ app.get('/oauth_callback', function (req, res) {
   });
 });
 
+app.get('/api/profile', function(req, res){
+  if (!req.session.access_token){
+    res.json({
+      error: 'not logged in',
+      notLoggedIn: true,
+      authorizationURI: authorizationURI,
+    })
+    return
+  }
+  getProfile(req.session.access_token, function(error, profile){
+    if (error) {
+      res.json({error: error})
+    }else{
+      res.json(profile);
+    }
+  });
+})
+
+app.get('/api/goals', function(req, res){
+  // if (!req.session.access_token) return renderAccessDenied(res)
+
+  getGoals(req.session.access_token, function(error, goals){
+    if (error) {
+      res.json({error: error})
+    }else{
+      res.json(goals);
+    }
+  });
+})
+
+function getProfile(access_token, callback){
+  let url = 'https://api.github.com/user'
+  url += '?'+qs.stringify({
+    access_token: access_token
+  })
+  request({
+    method: 'get',
+    url: url,
+    headers: {'user-agent': 'node.js'}
+  }, function(error, response){
+    console.log(response)
+    callback(error, JSON.parse(response.body))
+  })
+}
+
+  // var issues_endpoint = "https://api.github.com/repos/GuildCrafts/web-development-js/issues?access_token="
+
+app.use(express.static(__dirname + '/public'));
+
+app.get('*', function(req, res) {
+  res.sendFile(__dirname+"/public/index.html")
+});
+
 app.listen(port, function() {
   console.log('Node app is running on port', port);
 });
+
