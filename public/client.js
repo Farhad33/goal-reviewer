@@ -179,24 +179,33 @@ var GoalsPage = React.createClass({
   },
 
   render: function(props){
-    var goals = this.state.goals === null ? <div>Loading...</div> :
-      <ol>{this.state.goals.map(GoalListItem)}</ol>
+    var goals = this.state.goals === null ? 'Loading...':
+      <td>{this.state.goals.map(GoalListItem)}</td>
 
     return <div>
       <h1>Goals Page</h1>
-      {goals}
+      <table>
+        <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {goals}
+          </tr>
+        </tbody>
+      </table>
     </div>;
   }
 });
 
 var GoalListItem = function(props){
-  return <div key={props.id}>
+  return 
     <a href={"/goals/"+props.number}>{props.title}</a>
-  </div>
 }
 
-var GoalPage = function(props){
-  return <div>Goal #{props.goalId} Page</div>;
-};
+
 
 
