@@ -172,55 +172,69 @@ var GoalsPage = React.createClass({
   },
 
   componentWillMount: function(){
-    // $.getJSON('/api/goal/'+this.props.goalId, function(goals){
     $.getJSON('/api/goals', function(goals){
       this.setState({goals: goals})
     }.bind(this))
   },
 
   render: function(props){
-    var goals = this.state.goals === null ? 'Loading...':
-    
-    //   <td>{this.state.goals.map(GoalListItem)}</td>
-
-    // return <div>
-    //   <h1>Goals Page</h1>
-    //   <table>
-    //     <thead>
-    //       <tr>
-    //         <th>Project Name</th>
-    //         <th>Author</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       <tr>
-    //         {goals}
-    //       </tr>
-    //     </tbody>
-    //   </table>
-    // </div>;
+    return <div>
+      <h1>Goals Page</h1>
+      <GoalsTable goals={this.state.goals}/>
+    </div>;
   }
 });
 
 var GoalListItem = function(props){
-  return 
+  return <li key={props.id}>
     <a href={"/goals/"+props.number}>{props.title}</a>
+  </li>
 }
 
-var GoalRow = React.createClass({
-  render: function() {
-
-  }
-})
-
-var GoalTable = React.createClass({
+var GoalsTable = React.createClass({
   render: function() {
     var rows = [];
-    return
-    <ol>{this.state.goals.map(GoalListItem)}</ol>
+    var goals = this.props.goals 
+    
+    if (goals === null) return <div>Loading...</div>
+    var rows = goals.map(function(goal){
+      return <GoalsTableRow key={goal.id} {...goal} />
+    });
+
+    return <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Labels</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows}
+      </tbody>
+    </table>
   }
 })
 
+// var GoalsTableRow = React.createClass({
+//   render: function() {
+//     return <tr>
+//       <td>{this.props.title}</td>
+//       <td>{this.props.user.login}</td>
+//     </tr>
+//   }
+// })
+
+var GoalsTableRow = function(props) {
+  var labels = props.labels.map(function(label){
+    return <div key={label.name} style={{backgroundColor: '#'+label.color}}>{label.name}</div>
+  })
+  return <tr>
+    <td>{props.title}</td>
+    <td>{props.user.login}</td>
+    <td>{labels}</td>
+  </tr>
+}
 
 
 
