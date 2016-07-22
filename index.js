@@ -120,7 +120,7 @@ function getGoals(access_token, callback){
     url: url,
     headers: {'user-agent': 'node.js'}
   }, function(error, response){
-    console.log(access_token)
+    // console.log(access_token)
     callback(error, JSON.parse(response.body))
   })
 }

@@ -67,7 +67,7 @@ var Root = React.createClass({
 
   render: function(){
     var profile = this.state.profile;
-    console.log('RENDER', profile)
+    // console.log('RENDER', profile)
     if (profile === null){
       return <div>Loading...</div>;
     }
@@ -111,7 +111,7 @@ var Router = React.createClass({
     profile: React.PropTypes.object.isRequired,
   },
   render: function(){
-    console.log('RENDER router', this.props)
+    // console.log('RENDER router', this.props)
     var profile = this.props.profile;
     var path = this.props.path;
     var Page = router(path)
@@ -164,13 +164,39 @@ var GoalsPage = React.createClass({
   propTypes: {
     profile: React.PropTypes.object.isRequired,
   },
-  render: function(){
-    var goals = this.props.goals;
-    return  (
-      <div>
-        <h1>Goals Page</h1>
-        
-      </div>
-    )
+
+  getInitialState: function(){
+    return {
+      goals: null
+    }
+  },
+
+  componentWillMount: function(){
+    // $.getJSON('/api/goal/'+this.props.goalId, function(goals){
+    $.getJSON('/api/goals', function(goals){
+      this.setState({goals: goals})
+    }.bind(this))
+  },
+
+  render: function(props){
+    var goals = this.state.goals === null ? <div>Loading...</div> :
+      <ol>{this.state.goals.map(GoalListItem)}</ol>
+
+    return <div>
+      <h1>Goals Page</h1>
+      {goals}
+    </div>;
   }
-})
+});
+
+var GoalListItem = function(props){
+  return <div key={props.id}>
+    <a href={"/goals/"+props.number}>{props.title}</a>
+  </div>
+}
+
+var GoalPage = function(props){
+  return <div>Goal #{props.goalId} Page</div>;
+};
+
+
