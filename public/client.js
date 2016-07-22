@@ -180,24 +180,25 @@ var GoalsPage = React.createClass({
 
   render: function(props){
     var goals = this.state.goals === null ? 'Loading...':
-      <td>{this.state.goals.map(GoalListItem)}</td>
+    
+    //   <td>{this.state.goals.map(GoalListItem)}</td>
 
-    return <div>
-      <h1>Goals Page</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Project Name</th>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {goals}
-          </tr>
-        </tbody>
-      </table>
-    </div>;
+    // return <div>
+    //   <h1>Goals Page</h1>
+    //   <table>
+    //     <thead>
+    //       <tr>
+    //         <th>Project Name</th>
+    //         <th>Author</th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       <tr>
+    //         {goals}
+    //       </tr>
+    //     </tbody>
+    //   </table>
+    // </div>;
   }
 });
 
@@ -205,6 +206,25 @@ var GoalListItem = function(props){
   return 
     <a href={"/goals/"+props.number}>{props.title}</a>
 }
+
+var GoalRow = React.createClass({
+  render: function() {
+
+  }
+})
+
+var GoalTable = React.createClass({
+  render: function() {
+    var rows = [];
+    return
+    <ol>{this.state.goals.map(GoalListItem)}</ol>
+  }
+})
+
+
+
+
+
 
 
 
