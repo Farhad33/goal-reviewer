@@ -23,10 +23,10 @@ Serving an actual customer is a huge part of writing good software.  If you take
 - [x] The artifact produced is licensed with the [MIT license][mit-license].
 
 ## Competencies Developed
-[ ] React
-[ ] package.json
-[ ] OAuth
-[ ] NodeJS + Express
+* React
+* package.json
+* OAuth
+* NodeJS + Express
 
 <!-- LICENSE -->
 
